@@ -10,3 +10,5 @@ Repository adalah folder kolaborasi dimana semua tim yang bekerja didalam sebuah
 Bayangkan, sebuah repository adalah sebuah folder project utama yang dapat diduplikasi kedalam kedalam komputer anda. Lalu anda melakukan perubahan hanya pada komputer anda. Jika suatu saat porsi pekerjaan anda telah selesai. Anda dapat melakukan merger ke folder project utama. Begitupun dengan tim anda yang lain.
 
 Selamat belajar.
+
+Lukmanul Hakim, 14 Oktober 2026
