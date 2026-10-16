@@ -20,5 +20,8 @@ function get_details(){
 }
 
 $budi = New Mahasiswa();
-$budi->set_details("080826","Budi");
+$budi->set_details('080826','Budi');
 $budi->get_details();
+
+//Mengecek apakah budi merupakan instance dari class Mahasiswa
+var_dump($budi instanceof Mahasiswa);
