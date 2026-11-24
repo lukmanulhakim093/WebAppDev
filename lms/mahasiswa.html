@@ -23,15 +23,36 @@
         /* SIDEBAR */
 
         .sidebar {
-            width: 250px;
-            min-height: 100vh;
-            background: #212529;
-            position: fixed;
-            top: 0;
-            left: 0;
-            padding: 20px;
-            color: white;
-        }
+    width: 250px;
+    height: 100vh;
+    background: #212529;
+    position: fixed;
+    top: 0;
+    left: 0;
+    padding: 20px;
+
+    color: white;
+
+    /* Mengaktifkan scroll */
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+        .sidebar::-webkit-scrollbar {
+    width: 6px;
+}
+
+.sidebar::-webkit-scrollbar-track {
+    background: #212529;
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+    background: #6c757d;
+    border-radius: 10px;
+}
+
+.sidebar::-webkit-scrollbar-thumb:hover {
+    background: #adb5bd;
+}
 
         .sidebar .brand {
             font-size: 24px;
