@@ -1,0 +1,1213 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Admin Dashboard - EduLMS</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet">
+
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+        rel="stylesheet">
+
+    <style>
+
+        body {
+            background: #f4f7fb;
+            font-family: Arial, sans-serif;
+        }
+
+        /* SIDEBAR */
+
+        .sidebar {
+            width: 250px;
+            height: 100vh;
+            background: #212529;
+            position: fixed;
+            top: 0;
+            left: 0;
+            padding: 20px;
+            color: white;
+            overflow-y: auto;
+            overflow-x: hidden;
+            z-index: 1000;
+        }
+
+        .sidebar .brand {
+            font-size: 24px;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+            display: block;
+            margin-bottom: 35px;
+        }
+
+        .sidebar a.menu-link {
+            display: block;
+            color: #adb5bd;
+            text-decoration: none;
+            padding: 12px 15px;
+            border-radius: 8px;
+            margin-bottom: 7px;
+            cursor: pointer;
+        }
+
+        .sidebar a.menu-link:hover,
+        .sidebar a.menu-link.active {
+            background: #0d6efd;
+            color: white;
+        }
+
+        .sidebar a i {
+            margin-right: 10px;
+        }
+
+        .sidebar-title {
+            font-size: 11px;
+            color: #6c757d;
+            margin-top: 25px;
+        }
+
+        .sidebar::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        .sidebar::-webkit-scrollbar-thumb {
+            background: #6c757d;
+            border-radius: 10px;
+        }
+
+        /* MAIN CONTENT */
+
+        .main-content {
+            margin-left: 250px;
+            padding: 25px;
+        }
+
+        .topbar {
+            background: white;
+            padding: 15px 25px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.04);
+        }
+
+        /* STATISTICS */
+
+        .stat-card {
+            border: none;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.04);
+        }
+
+        .stat-icon {
+            font-size: 35px;
+            color: #0d6efd;
+        }
+
+        /* CONTENT CARD */
+
+        .content-card {
+            background: white;
+            border: none;
+            border-radius: 12px;
+            padding: 22px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.04);
+        }
+
+        .table th {
+            background: #f8f9fa;
+            font-size: 13px;
+            white-space: nowrap;
+        }
+
+        .table td {
+            vertical-align: middle;
+            font-size: 14px;
+        }
+
+        .page-section {
+            display: none;
+        }
+
+        .page-section.active {
+            display: block;
+        }
+
+        .profile-img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+        }
+
+        @media (max-width: 768px) {
+
+            .sidebar {
+                width: 70px;
+                padding: 15px 10px;
+            }
+
+            .sidebar .brand {
+                font-size: 0;
+                text-align: center;
+            }
+
+            .sidebar .brand i {
+                font-size: 25px;
+            }
+
+            .sidebar .menu-text,
+            .sidebar-title {
+                display: none;
+            }
+
+            .sidebar a.menu-link {
+                text-align: center;
+                padding: 12px 5px;
+            }
+
+            .sidebar a i {
+                margin: 0;
+                font-size: 20px;
+            }
+
+            .main-content {
+                margin-left: 70px;
+                padding: 15px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+
+<!-- SIDEBAR -->
+
+<div class="sidebar">
+
+    <a href="#" class="brand">
+        <i class="bi bi-mortarboard-fill"></i>
+        <span class="menu-text">EduLMS</span>
+    </a>
+
+    <p class="sidebar-title">MENU UTAMA</p>
+
+    <a class="menu-link active" onclick="showPage('dashboard', this)">
+        <i class="bi bi-grid"></i>
+        <span class="menu-text">Dashboard</span>
+    </a>
+
+    <a class="menu-link" onclick="showPage('pembayaran', this)">
+        <i class="bi bi-credit-card"></i>
+        <span class="menu-text">Verifikasi Pembayaran</span>
+    </a>
+
+    <a class="menu-link" onclick="showPage('transaksi', this)">
+        <i class="bi bi-receipt"></i>
+        <span class="menu-text">Data Pembayaran</span>
+    </a>
+
+    <p class="sidebar-title">MANAJEMEN PENGGUNA</p>
+
+    <a class="menu-link" onclick="showPage('mahasiswa', this)">
+        <i class="bi bi-people"></i>
+        <span class="menu-text">Data Mahasiswa</span>
+    </a>
+
+    <a class="menu-link" onclick="showPage('dosen', this)">
+        <i class="bi bi-person-video3"></i>
+        <span class="menu-text">Data Dosen</span>
+    </a>
+
+    <a class="menu-link" onclick="showPage('tambah-dosen', this)">
+        <i class="bi bi-person-plus"></i>
+        <span class="menu-text">Tambah Dosen</span>
+    </a>
+
+    <p class="sidebar-title">MANAJEMEN KURSUS</p>
+
+    <a class="menu-link" onclick="showPage('kursus', this)">
+        <i class="bi bi-book"></i>
+        <span class="menu-text">Data Kursus</span>
+    </a>
+
+    <a class="menu-link" onclick="showPage('laporan', this)">
+        <i class="bi bi-file-earmark-bar-graph"></i>
+        <span class="menu-text">Laporan</span>
+    </a>
+
+    <p class="sidebar-title">PENGATURAN</p>
+
+    <a href="login.html" class="menu-link">
+        <i class="bi bi-box-arrow-left"></i>
+        <span class="menu-text">Logout</span>
+    </a>
+
+</div>
+
+
+<!-- MAIN CONTENT -->
+
+<div class="main-content">
+
+
+    <!-- TOPBAR -->
+
+    <div class="topbar d-flex justify-content-between align-items-center">
+
+        <div>
+            <h5 class="fw-bold mb-0" id="pageTitle">
+                Dashboard Admin
+            </h5>
+
+            <small class="text-muted">
+                Sistem Learning Management System
+            </small>
+        </div>
+
+        <div class="d-flex align-items-center gap-3">
+
+            <button class="btn btn-light position-relative">
+                <i class="bi bi-bell fs-5"></i>
+                <span class="position-absolute top-0 start-100 translate-middle badge bg-danger">
+                    5
+                </span>
+            </button>
+
+            <div class="d-flex align-items-center gap-2">
+
+                <img src="https://ui-avatars.com/api/?name=Admin&background=0D6EFD&color=fff"
+                    class="profile-img">
+
+                <div class="d-none d-md-block">
+                    <strong>Administrator</strong>
+                    <small class="d-block text-muted">Admin LMS</small>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================================= -->
+    <!-- DASHBOARD -->
+    <!-- ================================= -->
+
+    <section id="dashboard" class="page-section active">
+
+        <h4 class="fw-bold mb-1">Selamat Datang, Admin!</h4>
+
+        <p class="text-muted mb-4">
+            Berikut ringkasan aktivitas LMS.
+        </p>
+
+        <div class="row g-4 mb-4">
+
+            <div class="col-lg-3 col-6">
+                <div class="card stat-card">
+                    <i class="bi bi-people stat-icon"></i>
+                    <h3 class="fw-bold mt-3" id="totalMahasiswa">250</h3>
+                    <p class="text-muted mb-0">Total Mahasiswa</p>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-6">
+                <div class="card stat-card">
+                    <i class="bi bi-person-video3 stat-icon text-success"></i>
+                    <h3 class="fw-bold mt-3" id="totalDosen">15</h3>
+                    <p class="text-muted mb-0">Total Dosen</p>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-6">
+                <div class="card stat-card">
+                    <i class="bi bi-credit-card stat-icon text-warning"></i>
+                    <h3 class="fw-bold mt-3" id="totalMenunggu">5</h3>
+                    <p class="text-muted mb-0">Pembayaran Menunggu</p>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-6">
+                <div class="card stat-card">
+                    <i class="bi bi-book stat-icon text-danger"></i>
+                    <h3 class="fw-bold mt-3">20</h3>
+                    <p class="text-muted mb-0">Total Kursus</p>
+                </div>
+            </div>
+
+        </div>
+
+
+        <div class="content-card">
+
+            <div class="d-flex justify-content-between mb-3">
+
+                <h5 class="fw-bold">
+                    Pembayaran Menunggu Verifikasi
+                </h5>
+
+                <button class="btn btn-outline-primary btn-sm"
+                    onclick="showPageById('pembayaran')">
+                    Lihat Semua
+                </button>
+
+            </div>
+
+            <div class="table-responsive">
+
+                <table class="table table-hover">
+
+                    <thead>
+                        <tr>
+                            <th>ID Transaksi</th>
+                            <th>Mahasiswa</th>
+                            <th>Kursus</th>
+                            <th>Jumlah</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="dashboardPaymentTable">
+
+                        <tr>
+                            <td>TRX001</td>
+                            <td>Budi Santoso</td>
+                            <td>Web Programming</td>
+                            <td>Rp250.000</td>
+                            <td><span class="badge bg-warning text-dark">Menunggu</span></td>
+                        </tr>
+
+                        <tr>
+                            <td>TRX002</td>
+                            <td>Siti Aminah</td>
+                            <td>Database MySQL</td>
+                            <td>Rp200.000</td>
+                            <td><span class="badge bg-warning text-dark">Menunggu</span></td>
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- ================================= -->
+    <!-- VERIFIKASI PEMBAYARAN -->
+    <!-- ================================= -->
+
+    <section id="pembayaran" class="page-section">
+
+        <h4 class="fw-bold mb-1">Verifikasi Pembayaran</h4>
+
+        <p class="text-muted mb-4">
+            Periksa bukti pembayaran mahasiswa sebelum menyetujui transaksi.
+        </p>
+
+        <div class="content-card">
+
+            <div class="d-flex justify-content-between mb-3">
+
+                <h5 class="fw-bold">Daftar Pembayaran</h5>
+
+                <input type="text"
+                    class="form-control w-auto"
+                    id="searchPayment"
+                    placeholder="Cari mahasiswa..."
+                    onkeyup="searchTable('searchPayment','paymentTable')">
+
+            </div>
+
+            <div class="table-responsive">
+
+                <table class="table table-hover" id="paymentTable">
+
+                    <thead>
+                        <tr>
+                            <th>ID Transaksi</th>
+                            <th>Mahasiswa</th>
+                            <th>Kursus</th>
+                            <th>Tanggal</th>
+                            <th>Jumlah</th>
+                            <th>Bukti</th>
+                            <th>Status</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        <tr data-status="pending">
+                            <td>TRX001</td>
+                            <td>Budi Santoso</td>
+                            <td>Web Programming</td>
+                            <td>13-11-2026</td>
+                            <td>Rp250.000</td>
+                            <td>
+                                <button class="btn btn-sm btn-outline-primary"
+                                    onclick="showProof('TRX001','Budi Santoso','Rp250.000')">
+                                    <i class="bi bi-image"></i> Lihat
+                                </button>
+                            </td>
+                            <td class="status-cell">
+                                <span class="badge bg-warning text-dark">Menunggu</span>
+                            </td>
+                            <td class="action-cell">
+                                <button class="btn btn-sm btn-success"
+                                    onclick="updatePayment(this,'approved')">
+                                    <i class="bi bi-check-lg"></i>
+                                </button>
+
+                                <button class="btn btn-sm btn-danger"
+                                    onclick="updatePayment(this,'rejected')">
+                                    <i class="bi bi-x-lg"></i>
+                                </button>
+                            </td>
+                        </tr>
+
+                        <tr data-status="pending">
+                            <td>TRX002</td>
+                            <td>Siti Aminah</td>
+                            <td>Database MySQL</td>
+                            <td>13-11-2026</td>
+                            <td>Rp200.000</td>
+                            <td>
+                                <button class="btn btn-sm btn-outline-primary"
+                                    onclick="showProof('TRX002','Siti Aminah','Rp200.000')">
+                                    <i class="bi bi-image"></i> Lihat
+                                </button>
+                            </td>
+                            <td class="status-cell">
+                                <span class="badge bg-warning text-dark">Menunggu</span>
+                            </td>
+                            <td class="action-cell">
+                                <button class="btn btn-sm btn-success"
+                                    onclick="updatePayment(this,'approved')">
+                                    <i class="bi bi-check-lg"></i>
+                                </button>
+
+                                <button class="btn btn-sm btn-danger"
+                                    onclick="updatePayment(this,'rejected')">
+                                    <i class="bi bi-x-lg"></i>
+                                </button>
+                            </td>
+                        </tr>
+
+                        <tr data-status="pending">
+                            <td>TRX003</td>
+                            <td>Andi Pratama</td>
+                            <td>Data Analytics</td>
+                            <td>12-11-2026</td>
+                            <td>Rp300.000</td>
+                            <td>
+                                <button class="btn btn-sm btn-outline-primary"
+                                    onclick="showProof('TRX003','Andi Pratama','Rp300.000')">
+                                    <i class="bi bi-image"></i> Lihat
+                                </button>
+                            </td>
+                            <td class="status-cell">
+                                <span class="badge bg-warning text-dark">Menunggu</span>
+                            </td>
+                            <td class="action-cell">
+                                <button class="btn btn-sm btn-success"
+                                    onclick="updatePayment(this,'approved')">
+                                    <i class="bi bi-check-lg"></i>
+                                </button>
+
+                                <button class="btn btn-sm btn-danger"
+                                    onclick="updatePayment(this,'rejected')">
+                                    <i class="bi bi-x-lg"></i>
+                                </button>
+                            </td>
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+            <small class="text-muted">
+                Klik tombol centang untuk menyetujui atau silang untuk menolak pembayaran.
+            </small>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- ================================= -->
+    <!-- DATA PEMBAYARAN -->
+    <!-- ================================= -->
+
+    <section id="transaksi" class="page-section">
+
+        <h4 class="fw-bold mb-4">Data Pembayaran</h4>
+
+        <div class="content-card">
+
+            <div class="table-responsive">
+
+                <table class="table table-hover">
+
+                    <thead>
+                        <tr>
+                            <th>ID Transaksi</th>
+                            <th>Mahasiswa</th>
+                            <th>Kursus</th>
+                            <th>Jumlah</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="transactionTable">
+
+                        <tr>
+                            <td>TRX001</td>
+                            <td>Budi Santoso</td>
+                            <td>Web Programming</td>
+                            <td>Rp250.000</td>
+                            <td><span class="badge bg-warning text-dark">Menunggu</span></td>
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- ================================= -->
+    <!-- DATA MAHASISWA -->
+    <!-- ================================= -->
+
+    <section id="mahasiswa" class="page-section">
+
+        <h4 class="fw-bold mb-4">Data Mahasiswa</h4>
+
+        <div class="content-card">
+
+            <div class="table-responsive">
+
+                <table class="table table-hover">
+
+                    <thead>
+                        <tr>
+                            <th>NIM</th>
+                            <th>Nama</th>
+                            <th>Email</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        <tr>
+                            <td>2026001</td>
+                            <td>Budi Santoso</td>
+                            <td>budi@email.com</td>
+                            <td><span class="badge bg-success">Aktif</span></td>
+                        </tr>
+
+                        <tr>
+                            <td>2026002</td>
+                            <td>Siti Aminah</td>
+                            <td>siti@email.com</td>
+                            <td><span class="badge bg-success">Aktif</span></td>
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- ================================= -->
+    <!-- DATA DOSEN -->
+    <!-- ================================= -->
+
+    <section id="dosen" class="page-section">
+
+        <div class="d-flex justify-content-between align-items-center mb-4">
+
+            <div>
+                <h4 class="fw-bold mb-1">Data Dosen</h4>
+                <p class="text-muted mb-0">Manajemen akun dosen/instruktur.</p>
+            </div>
+
+            <button class="btn btn-primary"
+                onclick="showPageById('tambah-dosen')">
+
+                <i class="bi bi-plus-lg"></i> Tambah Dosen
+
+            </button>
+
+        </div>
+
+        <div class="content-card">
+
+            <div class="table-responsive">
+
+                <table class="table table-hover" id="lecturerTable">
+
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Nama Dosen</th>
+                            <th>NIDN</th>
+                            <th>Email</th>
+                            <th>Bidang Keahlian</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        <tr>
+                            <td>1</td>
+                            <td>Dr. Ahmad</td>
+                            <td>0012345678</td>
+                            <td>ahmad@email.com</td>
+                            <td>Programming</td>
+                            <td><span class="badge bg-success">Aktif</span></td>
+                        </tr>
+
+                        <tr>
+                            <td>2</td>
+                            <td>Dr. Rina</td>
+                            <td>0012345679</td>
+                            <td>rina@email.com</td>
+                            <td>Database</td>
+                            <td><span class="badge bg-success">Aktif</span></td>
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- ================================= -->
+    <!-- TAMBAH DOSEN -->
+    <!-- ================================= -->
+
+    <section id="tambah-dosen" class="page-section">
+
+        <h4 class="fw-bold mb-1">Tambah Akun Dosen</h4>
+
+        <p class="text-muted mb-4">
+            Buat akun dosen baru untuk mengakses LMS.
+        </p>
+
+        <div class="content-card">
+
+            <form id="formDosen">
+
+                <div class="row g-3">
+
+                    <div class="col-md-6">
+
+                        <label class="form-label">Nama Lengkap</label>
+
+                        <input type="text"
+                            class="form-control"
+                            name="nama"
+                            placeholder="Nama lengkap dosen"
+                            required>
+
+                    </div>
+
+                    <div class="col-md-6">
+
+                        <label class="form-label">NIDN / NIP</label>
+
+                        <input type="text"
+                            class="form-control"
+                            name="nidn"
+                            placeholder="Nomor identitas dosen"
+                            required>
+
+                    </div>
+
+                    <div class="col-md-6">
+
+                        <label class="form-label">Email</label>
+
+                        <input type="email"
+                            class="form-control"
+                            name="email"
+                            placeholder="dosen@email.com"
+                            required>
+
+                    </div>
+
+                    <div class="col-md-6">
+
+                        <label class="form-label">Username</label>
+
+                        <input type="text"
+                            class="form-control"
+                            name="username"
+                            placeholder="Username dosen"
+                            required>
+
+                    </div>
+
+                    <div class="col-md-6">
+
+                        <label class="form-label">Bidang Keahlian</label>
+
+                        <select class="form-select" name="keahlian" required>
+
+                            <option value="">Pilih bidang keahlian</option>
+                            <option>Programming</option>
+                            <option>Database</option>
+                            <option>Data Science</option>
+                            <option>Networking</option>
+                            <option>Artificial Intelligence</option>
+                            <option>Software Engineering</option>
+
+                        </select>
+
+                    </div>
+
+                    <div class="col-md-6">
+
+                        <label class="form-label">Password</label>
+
+                        <input type="password"
+                            class="form-control"
+                            name="password"
+                            placeholder="Masukkan password"
+                            minlength="8"
+                            required>
+
+                    </div>
+
+                    <div class="col-md-6">
+
+                        <label class="form-label">Status Akun</label>
+
+                        <select class="form-select" name="status">
+
+                            <option value="Aktif">Aktif</option>
+                            <option value="Tidak Aktif">Tidak Aktif</option>
+
+                        </select>
+
+                    </div>
+
+                </div>
+
+                <hr class="my-4">
+
+                <button type="submit" class="btn btn-primary">
+
+                    <i class="bi bi-person-plus"></i>
+                    Simpan Akun Dosen
+
+                </button>
+
+                <button type="reset" class="btn btn-secondary">
+                    Reset
+                </button>
+
+            </form>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- ================================= -->
+    <!-- DATA KURSUS -->
+    <!-- ================================= -->
+
+    <section id="kursus" class="page-section">
+
+        <h4 class="fw-bold mb-4">Data Kursus</h4>
+
+        <div class="content-card">
+
+            <table class="table">
+
+                <thead>
+                    <tr>
+                        <th>Kode</th>
+                        <th>Nama Kursus</th>
+                        <th>Instruktur</th>
+                        <th>Peserta</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <tr>
+                        <td>KRS001</td>
+                        <td>Web Programming</td>
+                        <td>Dr. Ahmad</td>
+                        <td>50</td>
+                    </tr>
+
+                    <tr>
+                        <td>KRS002</td>
+                        <td>Database MySQL</td>
+                        <td>Dr. Rina</td>
+                        <td>35</td>
+                    </tr>
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- ================================= -->
+    <!-- LAPORAN -->
+    <!-- ================================= -->
+
+    <section id="laporan" class="page-section">
+
+        <h4 class="fw-bold mb-4">Laporan LMS</h4>
+
+        <div class="content-card">
+
+            <h5>Ringkasan Sistem</h5>
+
+            <p>Total mahasiswa: 250</p>
+            <p>Total dosen: 15</p>
+            <p>Total kursus: 20</p>
+            <p>Total pembayaran menunggu: 5</p>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- FOOTER -->
+
+    <div class="text-center text-muted mt-5">
+
+        <small>
+            &copy; 2026 EduLMS. All Rights Reserved.
+        </small>
+
+    </div>
+
+</div>
+
+
+
+<!-- ================================= -->
+<!-- MODAL DETAIL PEMBAYARAN -->
+<!-- ================================= -->
+
+<div class="modal fade" id="proofModal" tabindex="-1">
+
+    <div class="modal-dialog modal-dialog-centered">
+
+        <div class="modal-content">
+
+            <div class="modal-header">
+
+                <h5 class="modal-title fw-bold">
+                    Detail Pembayaran
+                </h5>
+
+                <button type="button"
+                    class="btn-close"
+                    data-bs-dismiss="modal">
+                </button>
+
+            </div>
+
+            <div class="modal-body">
+
+                <p>ID Transaksi: <strong id="proofId"></strong></p>
+
+                <p>Mahasiswa: <strong id="proofName"></strong></p>
+
+                <p>Jumlah: <strong id="proofAmount"></strong></p>
+
+                <hr>
+
+                <h6>Bukti Transfer</h6>
+
+                <div class="border rounded p-4 text-center bg-light">
+
+                    <i class="bi bi-image fs-1 text-primary"></i>
+
+                    <p class="mb-0 mt-2">
+                        Simulasi tampilan bukti pembayaran.
+                    </p>
+
+                </div>
+
+            </div>
+
+            <div class="modal-footer">
+
+                <button class="btn btn-secondary"
+                    data-bs-dismiss="modal">
+                    Tutup
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<!-- BOOTSTRAP JS -->
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+
+<script>
+
+/* NAVIGASI SIDEBAR */
+
+function showPage(id, element) {
+
+    document.querySelectorAll('.page-section').forEach(function(page) {
+        page.classList.remove('active');
+    });
+
+    document.getElementById(id).classList.add('active');
+
+    document.querySelectorAll('.menu-link').forEach(function(menu) {
+        menu.classList.remove('active');
+    });
+
+    element.classList.add('active');
+
+    const titles = {
+        dashboard: 'Dashboard Admin',
+        pembayaran: 'Verifikasi Pembayaran',
+        transaksi: 'Data Pembayaran',
+        mahasiswa: 'Data Mahasiswa',
+        dosen: 'Data Dosen',
+        'tambah-dosen': 'Tambah Dosen',
+        kursus: 'Data Kursus',
+        laporan: 'Laporan'
+    };
+
+    document.getElementById('pageTitle').innerText = titles[id];
+
+}
+
+function showPageById(id) {
+
+    const menu = document.querySelector(
+        '.menu-link[onclick="showPage(\'' + id + '\', this)"]'
+    );
+
+    if (menu) {
+        showPage(id, menu);
+    }
+
+}
+
+
+/* DETAIL BUKTI PEMBAYARAN */
+
+function showProof(id, nama, jumlah) {
+
+    document.getElementById('proofId').innerText = id;
+    document.getElementById('proofName').innerText = nama;
+    document.getElementById('proofAmount').innerText = jumlah;
+
+    const modal = new bootstrap.Modal(
+        document.getElementById('proofModal')
+    );
+
+    modal.show();
+
+}
+
+
+/* VERIFIKASI PEMBAYARAN */
+
+function updatePayment(button, status) {
+
+    const row = button.closest('tr');
+
+    const transaksi = row.cells[0].innerText;
+
+    const konfirmasi = confirm(
+        'Apakah Anda yakin ingin ' +
+        (status === 'approved' ? 'menyetujui' : 'menolak') +
+        ' pembayaran ' + transaksi + '?'
+    );
+
+    if (!konfirmasi) return;
+
+    row.dataset.status = status;
+
+    const statusCell = row.querySelector('.status-cell');
+
+    if (status === 'approved') {
+
+        statusCell.innerHTML =
+            '<span class="badge bg-success">Disetujui</span>';
+
+    } else {
+
+        statusCell.innerHTML =
+            '<span class="badge bg-danger">Ditolak</span>';
+
+    }
+
+    row.querySelector('.action-cell').innerHTML =
+        '<span class="text-muted small">Selesai</span>';
+
+    updateStatistics();
+
+    alert('Status pembayaran berhasil diperbarui (simulasi).');
+
+}
+
+
+/* UPDATE STATISTIK */
+
+function updateStatistics() {
+
+    const rows = document.querySelectorAll(
+        '#paymentTable tbody tr'
+    );
+
+    let pending = 0;
+
+    rows.forEach(function(row) {
+
+        if (row.dataset.status === 'pending') {
+            pending++;
+        }
+
+    });
+
+    document.getElementById('totalMenunggu').innerText = pending;
+
+}
+
+
+/* PENCARIAN TABEL */
+
+function searchTable(inputId, tableId) {
+
+    const keyword = document.getElementById(inputId)
+        .value.toLowerCase();
+
+    const rows = document.querySelectorAll(
+        '#' + tableId + ' tbody tr'
+    );
+
+    rows.forEach(function(row) {
+
+        row.style.display = row.innerText
+            .toLowerCase()
+            .includes(keyword) ? '' : 'none';
+
+    });
+
+}
+
+
+/* TAMBAH DOSEN */
+
+document.getElementById('formDosen')
+.addEventListener('submit', function(e) {
+
+    e.preventDefault();
+
+    const form = this;
+
+    const nama = form.nama.value;
+    const nidn = form.nidn.value;
+    const email = form.email.value;
+    const username = form.username.value;
+    const keahlian = form.keahlian.value;
+    const status = form.status.value;
+
+    const table = document.querySelector(
+        '#lecturerTable tbody'
+    );
+
+    const nomor = table.rows.length + 1;
+
+    const row = table.insertRow();
+
+    row.innerHTML = `
+        <td>${nomor}</td>
+        <td>${nama}</td>
+        <td>${nidn}</td>
+        <td>${email}</td>
+        <td>${keahlian}</td>
+        <td>
+            <span class="badge ${status === 'Aktif' ? 'bg-success' : 'bg-secondary'}">
+                ${status}
+            </span>
+        </td>
+    `;
+
+    document.getElementById('totalDosen').innerText =
+        table.rows.length + 13;
+
+    alert(
+        'Akun dosen berhasil ditambahkan (simulasi).\n' +
+        'Username: ' + username
+    );
+
+    form.reset();
+
+    showPageById('dosen');
+
+});
+
+</script>
+
+</body>
+</html>
