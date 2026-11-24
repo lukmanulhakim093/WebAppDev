@@ -1,0 +1,965 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Dosen - EduLMS</title>
+
+    <!-- Bootstrap 5.3 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+
+    <style>
+        body {
+            background-color: #f5f6fa;
+            font-family: Arial, sans-serif;
+        }
+
+        .sidebar {
+            width: 250px;
+            height: 100vh;
+            background: #212529;
+            position: fixed;
+            top: 0;
+            left: 0;
+            padding: 20px;
+            color: white;
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+
+        .sidebar h4 {
+            font-weight: bold;
+            margin-bottom: 30px;
+        }
+
+        .sidebar a {
+            display: block;
+            color: #adb5bd;
+            text-decoration: none;
+            padding: 12px;
+            border-radius: 6px;
+            margin-bottom: 5px;
+            cursor: pointer;
+        }
+
+        .sidebar a:hover,
+        .sidebar a.active {
+            background: #0d6efd;
+            color: white;
+        }
+
+        .sidebar i {
+            margin-right: 10px;
+        }
+
+        .main-content {
+            margin-left: 250px;
+            padding: 25px;
+        }
+
+        .topbar {
+            background: white;
+            padding: 15px 20px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .card-stat {
+            border: none;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .stat-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+
+        .course-card {
+            border: none;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            height: 100%;
+        }
+
+        .course-card .card-body {
+            padding: 20px;
+        }
+
+        .course-icon {
+            height: 130px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 55px;
+            color: white;
+            background: #0d6efd;
+        }
+
+        .page-section {
+            display: none;
+        }
+
+        .page-section.active {
+            display: block;
+        }
+
+        .table-card {
+            border: none;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 70px;
+                padding: 10px;
+            }
+
+            .sidebar h4,
+            .sidebar .menu-text {
+                display: none;
+            }
+
+            .sidebar a {
+                text-align: center;
+                padding: 12px 5px;
+            }
+
+            .sidebar i {
+                margin: 0;
+                font-size: 20px;
+            }
+
+            .main-content {
+                margin-left: 70px;
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- SIDEBAR -->
+<div class="sidebar">
+
+    <h4><i class="bi bi-mortarboard-fill"></i> EduLMS</h4>
+
+    <p class="text-secondary small menu-text">MENU DOSEN</p>
+
+    <a class="menu-link active" data-page="dashboard"
+       onclick="showPage('dashboard', this)">
+        <i class="bi bi-speedometer2"></i>
+        <span class="menu-text">Dashboard</span>
+    </a>
+
+    <a class="menu-link" data-page="kursus"
+       onclick="showPage('kursus', this)">
+        <i class="bi bi-book"></i>
+        <span class="menu-text">Kursus Saya</span>
+    </a>
+
+    <a class="menu-link" data-page="materi"
+       onclick="showPage('materi', this)">
+        <i class="bi bi-file-earmark-text"></i>
+        <span class="menu-text">Materi</span>
+    </a>
+
+    <a class="menu-link" data-page="tugas"
+       onclick="showPage('tugas', this)">
+        <i class="bi bi-clipboard-check"></i>
+        <span class="menu-text">Tugas</span>
+    </a>
+
+    <a class="menu-link" data-page="kuis"
+       onclick="showPage('kuis', this)">
+        <i class="bi bi-question-circle"></i>
+        <span class="menu-text">Kuis</span>
+    </a>
+
+    <a class="menu-link" data-page="mahasiswa"
+       onclick="showPage('mahasiswa', this)">
+        <i class="bi bi-people"></i>
+        <span class="menu-text">Mahasiswa</span>
+    </a>
+
+    <a class="menu-link" data-page="penilaian"
+       onclick="showPage('penilaian', this)">
+        <i class="bi bi-award"></i>
+        <span class="menu-text">Penilaian</span>
+    </a>
+
+    <a class="menu-link" data-page="profil"
+       onclick="showPage('profil', this)">
+        <i class="bi bi-person-circle"></i>
+        <span class="menu-text">Profil Saya</span>
+    </a>
+
+    <hr>
+
+    <a href="login.html">
+        <i class="bi bi-box-arrow-right"></i>
+        <span class="menu-text">Logout</span>
+    </a>
+
+</div>
+
+
+<!-- MAIN CONTENT -->
+<div class="main-content">
+
+    <!-- TOPBAR -->
+    <div class="topbar">
+
+        <div>
+            <h5 class="mb-0" id="pageTitle">Dashboard Dosen</h5>
+            <small class="text-muted">Selamat datang di EduLMS</small>
+        </div>
+
+        <div class="d-flex align-items-center gap-3">
+
+            <button class="btn btn-light position-relative">
+                <i class="bi bi-bell fs-5"></i>
+                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                    3
+                </span>
+            </button>
+
+            <div class="d-flex align-items-center">
+                <div class="rounded-circle bg-primary text-white p-2 me-2">
+                    <i class="bi bi-person-fill"></i>
+                </div>
+
+                <div>
+                    <strong>Dr. Budi Santoso</strong>
+                    <small class="d-block text-muted">Dosen</small>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================= DASHBOARD ================= -->
+    <div id="dashboard" class="page-section active">
+
+        <h4 class="mb-4">Dashboard</h4>
+
+        <!-- STATISTIK -->
+        <div class="row g-3 mb-4">
+
+            <div class="col-md-3">
+                <div class="card card-stat">
+                    <div class="card-body d-flex justify-content-between">
+                        <div>
+                            <p class="text-muted mb-1">Kursus Saya</p>
+                            <h3>5</h3>
+                        </div>
+                        <div class="stat-icon bg-primary-subtle text-primary">
+                            <i class="bi bi-book"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="card card-stat">
+                    <div class="card-body d-flex justify-content-between">
+                        <div>
+                            <p class="text-muted mb-1">Total Mahasiswa</p>
+                            <h3>125</h3>
+                        </div>
+                        <div class="stat-icon bg-success-subtle text-success">
+                            <i class="bi bi-people"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="card card-stat">
+                    <div class="card-body d-flex justify-content-between">
+                        <div>
+                            <p class="text-muted mb-1">Tugas Aktif</p>
+                            <h3>8</h3>
+                        </div>
+                        <div class="stat-icon bg-warning-subtle text-warning">
+                            <i class="bi bi-clipboard-check"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="card card-stat">
+                    <div class="card-body d-flex justify-content-between">
+                        <div>
+                            <p class="text-muted mb-1">Perlu Dinilai</p>
+                            <h3>12</h3>
+                        </div>
+                        <div class="stat-icon bg-danger-subtle text-danger">
+                            <i class="bi bi-pencil-square"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+
+        <!-- KURSUS -->
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h5>Kursus yang Saya Ajarkan</h5>
+
+            <button class="btn btn-primary btn-sm"
+                    onclick="showPageById('kursus')">
+                <i class="bi bi-plus-circle"></i> Kelola Kursus
+            </button>
+        </div>
+
+        <div class="row g-3 mb-4">
+
+            <div class="col-md-4">
+                <div class="card course-card">
+                    <div class="course-icon">
+                        <i class="bi bi-database"></i>
+                    </div>
+                    <div class="card-body">
+                        <h6>Basis Data</h6>
+                        <p class="text-muted small">Mata kuliah pengelolaan basis data.</p>
+                        <p class="mb-2">
+                            <i class="bi bi-people"></i> 35 Mahasiswa
+                        </p>
+                        <div class="progress mb-3" style="height: 7px;">
+                            <div class="progress-bar" style="width: 75%"></div>
+                        </div>
+                        <button class="btn btn-outline-primary btn-sm w-100"
+                                onclick="showPageById('kursus')">
+                            Kelola Kursus
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card course-card">
+                    <div class="course-icon bg-success">
+                        <i class="bi bi-code-slash"></i>
+                    </div>
+                    <div class="card-body">
+                        <h6>Pemrograman Berorientasi Objek</h6>
+                        <p class="text-muted small">Konsep pemrograman berbasis objek.</p>
+                        <p class="mb-2">
+                            <i class="bi bi-people"></i> 40 Mahasiswa
+                        </p>
+                        <div class="progress mb-3" style="height: 7px;">
+                            <div class="progress-bar bg-success" style="width: 60%"></div>
+                        </div>
+                        <button class="btn btn-outline-primary btn-sm w-100"
+                                onclick="showPageById('kursus')">
+                            Kelola Kursus
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card course-card">
+                    <div class="course-icon bg-warning">
+                        <i class="bi bi-window"></i>
+                    </div>
+                    <div class="card-body">
+                        <h6>Pengembangan Aplikasi Web</h6>
+                        <p class="text-muted small">Pengembangan aplikasi berbasis web.</p>
+                        <p class="mb-2">
+                            <i class="bi bi-people"></i> 50 Mahasiswa
+                        </p>
+                        <div class="progress mb-3" style="height: 7px;">
+                            <div class="progress-bar bg-warning" style="width: 45%"></div>
+                        </div>
+                        <button class="btn btn-outline-primary btn-sm w-100"
+                                onclick="showPageById('kursus')">
+                            Kelola Kursus
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+
+        <!-- AKTIVITAS -->
+        <div class="row g-3">
+
+            <div class="col-md-7">
+                <div class="card table-card">
+                    <div class="card-body">
+                        <h5 class="mb-3">Aktivitas Terbaru</h5>
+
+                        <ul class="list-group list-group-flush">
+
+                            <li class="list-group-item">
+                                <i class="bi bi-upload text-primary me-2"></i>
+                                Materi baru ditambahkan pada kursus Basis Data.
+                                <small class="d-block text-muted">Hari ini, 09:30</small>
+                            </li>
+
+                            <li class="list-group-item">
+                                <i class="bi bi-file-earmark-check text-success me-2"></i>
+                                5 mahasiswa mengumpulkan tugas.
+                                <small class="d-block text-muted">Kemarin, 14:00</small>
+                            </li>
+
+                            <li class="list-group-item">
+                                <i class="bi bi-person-plus text-info me-2"></i>
+                                Mahasiswa baru bergabung pada kursus PBO.
+                                <small class="d-block text-muted">Kemarin, 10:15</small>
+                            </li>
+
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="col-md-5">
+                <div class="card table-card">
+                    <div class="card-body">
+                        <h5 class="mb-3">Tugas yang Perlu Dinilai</h5>
+
+                        <div class="d-flex justify-content-between border-bottom py-3">
+                            <div>
+                                <strong>Tugas ERD</strong>
+                                <small class="d-block text-muted">Basis Data</small>
+                            </div>
+                            <span class="badge bg-warning text-dark">5 Belum Dinilai</span>
+                        </div>
+
+                        <div class="d-flex justify-content-between border-bottom py-3">
+                            <div>
+                                <strong>Tugas Class Diagram</strong>
+                                <small class="d-block text-muted">PBO</small>
+                            </div>
+                            <span class="badge bg-warning text-dark">4 Belum Dinilai</span>
+                        </div>
+
+                        <div class="d-flex justify-content-between py-3">
+                            <div>
+                                <strong>Tugas CRUD</strong>
+                                <small class="d-block text-muted">Aplikasi Web</small>
+                            </div>
+                            <span class="badge bg-warning text-dark">3 Belum Dinilai</span>
+                        </div>
+
+                        <button class="btn btn-primary btn-sm w-100"
+                                onclick="showPageById('penilaian')">
+                            Lihat Semua Tugas
+                        </button>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================= KURSUS SAYA ================= -->
+    <div id="kursus" class="page-section">
+
+        <div class="d-flex justify-content-between mb-4">
+            <div>
+                <h4>Kursus Saya</h4>
+                <p class="text-muted">Kelola kursus yang Anda ajarkan.</p>
+            </div>
+
+            <button class="btn btn-primary">
+                <i class="bi bi-plus-circle"></i> Tambah Kursus
+            </button>
+        </div>
+
+        <div class="card table-card">
+            <div class="card-body">
+
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle">
+                        <thead class="table-light">
+                            <tr>
+                                <th>No</th>
+                                <th>Nama Kursus</th>
+                                <th>Kode</th>
+                                <th>Mahasiswa</th>
+                                <th>Status</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>Basis Data</td>
+                                <td>BD001</td>
+                                <td>35</td>
+                                <td><span class="badge bg-success">Aktif</span></td>
+                                <td><button class="btn btn-sm btn-primary">Detail</button></td>
+                            </tr>
+
+                            <tr>
+                                <td>2</td>
+                                <td>Pemrograman Berorientasi Objek</td>
+                                <td>PBO001</td>
+                                <td>40</td>
+                                <td><span class="badge bg-success">Aktif</span></td>
+                                <td><button class="btn btn-sm btn-primary">Detail</button></td>
+                            </tr>
+
+                            <tr>
+                                <td>3</td>
+                                <td>Pengembangan Aplikasi Web</td>
+                                <td>PAW001</td>
+                                <td>50</td>
+                                <td><span class="badge bg-success">Aktif</span></td>
+                                <td><button class="btn btn-sm btn-primary">Detail</button></td>
+                            </tr>
+                        </tbody>
+
+                    </table>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+
+    <!-- ================= MATERI ================= -->
+    <div id="materi" class="page-section">
+
+        <div class="d-flex justify-content-between mb-4">
+            <div>
+                <h4>Materi Pembelajaran</h4>
+                <p class="text-muted">Kelola materi untuk setiap kursus.</p>
+            </div>
+
+            <button class="btn btn-primary">
+                <i class="bi bi-plus-circle"></i> Tambah Materi
+            </button>
+        </div>
+
+        <div class="card table-card">
+            <div class="card-body">
+
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle">
+                        <thead class="table-light">
+                            <tr>
+                                <th>No</th>
+                                <th>Judul Materi</th>
+                                <th>Kursus</th>
+                                <th>Pertemuan</th>
+                                <th>File</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>Konsep Dasar Basis Data</td>
+                                <td>Basis Data</td>
+                                <td>1</td>
+                                <td><i class="bi bi-file-pdf text-danger"></i> PDF</td>
+                                <td>
+                                    <button class="btn btn-sm btn-warning">Edit</button>
+                                    <button class="btn btn-sm btn-danger">Hapus</button>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>2</td>
+                                <td>Entity Relationship Diagram</td>
+                                <td>Basis Data</td>
+                                <td>2</td>
+                                <td><i class="bi bi-file-pdf text-danger"></i> PDF</td>
+                                <td>
+                                    <button class="btn btn-sm btn-warning">Edit</button>
+                                    <button class="btn btn-sm btn-danger">Hapus</button>
+                                </td>
+                            </tr>
+                        </tbody>
+
+                    </table>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+
+    <!-- ================= TUGAS ================= -->
+    <div id="tugas" class="page-section">
+
+        <div class="d-flex justify-content-between mb-4">
+            <div>
+                <h4>Manajemen Tugas</h4>
+                <p class="text-muted">Buat dan kelola tugas mahasiswa.</p>
+            </div>
+
+            <button class="btn btn-primary">
+                <i class="bi bi-plus-circle"></i> Buat Tugas
+            </button>
+        </div>
+
+        <div class="card table-card">
+            <div class="card-body">
+
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle">
+                        <thead class="table-light">
+                            <tr>
+                                <th>No</th>
+                                <th>Nama Tugas</th>
+                                <th>Kursus</th>
+                                <th>Deadline</th>
+                                <th>Pengumpulan</th>
+                                <th>Status</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>Membuat ERD</td>
+                                <td>Basis Data</td>
+                                <td>20 Nov 2026</td>
+                                <td>30/35</td>
+                                <td><span class="badge bg-success">Aktif</span></td>
+                                <td><button class="btn btn-sm btn-primary">Detail</button></td>
+                            </tr>
+
+                            <tr>
+                                <td>2</td>
+                                <td>Membuat Class Diagram</td>
+                                <td>PBO</td>
+                                <td>25 Nov 2026</td>
+                                <td>36/40</td>
+                                <td><span class="badge bg-success">Aktif</span></td>
+                                <td><button class="btn btn-sm btn-primary">Detail</button></td>
+                            </tr>
+                        </tbody>
+
+                    </table>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+
+    <!-- ================= KUIS ================= -->
+    <div id="kuis" class="page-section">
+
+        <div class="d-flex justify-content-between mb-4">
+            <div>
+                <h4>Manajemen Kuis</h4>
+                <p class="text-muted">Buat dan kelola kuis pembelajaran.</p>
+            </div>
+
+            <button class="btn btn-primary">
+                <i class="bi bi-plus-circle"></i> Buat Kuis
+            </button>
+        </div>
+
+        <div class="card table-card">
+            <div class="card-body">
+
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle">
+                        <thead class="table-light">
+                            <tr>
+                                <th>No</th>
+                                <th>Nama Kuis</th>
+                                <th>Kursus</th>
+                                <th>Jumlah Soal</th>
+                                <th>Waktu</th>
+                                <th>Status</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>Kuis Normalisasi</td>
+                                <td>Basis Data</td>
+                                <td>10</td>
+                                <td>30 Menit</td>
+                                <td><span class="badge bg-success">Aktif</span></td>
+                                <td><button class="btn btn-sm btn-primary">Detail</button></td>
+                            </tr>
+
+                            <tr>
+                                <td>2</td>
+                                <td>Kuis Konsep OOP</td>
+                                <td>PBO</td>
+                                <td>15</td>
+                                <td>45 Menit</td>
+                                <td><span class="badge bg-success">Aktif</span></td>
+                                <td><button class="btn btn-sm btn-primary">Detail</button></td>
+                            </tr>
+                        </tbody>
+
+                    </table>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+
+    <!-- ================= MAHASISWA ================= -->
+    <div id="mahasiswa" class="page-section">
+
+        <h4 class="mb-4">Daftar Mahasiswa</h4>
+
+        <div class="card table-card">
+            <div class="card-body">
+
+                <div class="mb-3">
+                    <input type="text" class="form-control"
+                           placeholder="Cari nama atau NIM mahasiswa...">
+                </div>
+
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle">
+                        <thead class="table-light">
+                            <tr>
+                                <th>No</th>
+                                <th>NIM</th>
+                                <th>Nama Mahasiswa</th>
+                                <th>Kursus</th>
+                                <th>Email</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>2301001</td>
+                                <td>Andi Pratama</td>
+                                <td>Basis Data</td>
+                                <td>andi@email.com</td>
+                                <td><span class="badge bg-success">Aktif</span></td>
+                            </tr>
+
+                            <tr>
+                                <td>2</td>
+                                <td>2301002</td>
+                                <td>Siti Rahma</td>
+                                <td>Basis Data</td>
+                                <td>siti@email.com</td>
+                                <td><span class="badge bg-success">Aktif</span></td>
+                            </tr>
+                        </tbody>
+
+                    </table>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+
+    <!-- ================= PENILAIAN ================= -->
+    <div id="penilaian" class="page-section">
+
+        <h4 class="mb-4">Penilaian Tugas Mahasiswa</h4>
+
+        <div class="card table-card">
+            <div class="card-body">
+
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle">
+                        <thead class="table-light">
+                            <tr>
+                                <th>No</th>
+                                <th>Mahasiswa</th>
+                                <th>Tugas</th>
+                                <th>Kursus</th>
+                                <th>Tanggal Kumpul</th>
+                                <th>Nilai</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>Andi Pratama</td>
+                                <td>Membuat ERD</td>
+                                <td>Basis Data</td>
+                                <td>12 Nov 2026</td>
+                                <td><span class="badge bg-warning text-dark">Belum dinilai</span></td>
+                                <td><button class="btn btn-sm btn-primary">Nilai</button></td>
+                            </tr>
+
+                            <tr>
+                                <td>2</td>
+                                <td>Siti Rahma</td>
+                                <td>Membuat ERD</td>
+                                <td>Basis Data</td>
+                                <td>12 Nov 2026</td>
+                                <td><span class="badge bg-success">85</span></td>
+                                <td><button class="btn btn-sm btn-primary">Detail</button></td>
+                            </tr>
+                        </tbody>
+
+                    </table>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+
+    <!-- ================= PROFIL ================= -->
+    <div id="profil" class="page-section">
+
+        <h4 class="mb-4">Profil Dosen</h4>
+
+        <div class="card table-card">
+            <div class="card-body">
+
+                <div class="row">
+
+                    <div class="col-md-3 text-center">
+                        <div class="rounded-circle bg-primary text-white d-flex justify-content-center align-items-center mx-auto"
+                             style="width:120px;height:120px;font-size:50px;">
+                            <i class="bi bi-person"></i>
+                        </div>
+
+                        <h5 class="mt-3">Dr. Budi Santoso</h5>
+                        <p class="text-muted">Dosen</p>
+                    </div>
+
+                    <div class="col-md-9">
+
+                        <form>
+                            <div class="mb-3">
+                                <label class="form-label">Nama Lengkap</label>
+                                <input type="text" class="form-control"
+                                       value="Dr. Budi Santoso">
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">NIDN</label>
+                                <input type="text" class="form-control"
+                                       value="0012345678">
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Email</label>
+                                <input type="email" class="form-control"
+                                       value="budi@email.com">
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Bidang Keahlian</label>
+                                <input type="text" class="form-control"
+                                       value="Sistem Informasi">
+                            </div>
+
+                            <button type="button" class="btn btn-primary">
+                                Simpan Perubahan
+                            </button>
+                        </form>
+
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- JAVASCRIPT -->
+<script>
+
+    function showPage(id, element) {
+
+        // Menyembunyikan seluruh halaman
+        document.querySelectorAll('.page-section').forEach(page => {
+            page.classList.remove('active');
+        });
+
+        // Menampilkan halaman yang dipilih
+        document.getElementById(id).classList.add('active');
+
+        // Menghapus status aktif dari seluruh menu
+        document.querySelectorAll('.menu-link').forEach(menu => {
+            menu.classList.remove('active');
+        });
+
+        // Mengaktifkan menu yang dipilih
+        if (element) {
+            element.classList.add('active');
+        }
+
+        // Mengubah judul halaman
+        const titles = {
+            dashboard: 'Dashboard Dosen',
+            kursus: 'Kursus Saya',
+            materi: 'Materi Pembelajaran',
+            tugas: 'Manajemen Tugas',
+            kuis: 'Manajemen Kuis',
+            mahasiswa: 'Daftar Mahasiswa',
+            penilaian: 'Penilaian',
+            profil: 'Profil Saya'
+        };
+
+        document.getElementById('pageTitle').innerText = titles[id] || 'Dashboard Dosen';
+    }
+
+
+    function showPageById(id) {
+
+        const menu = document.querySelector(
+            '.menu-link[data-page="' + id + '"]'
+        );
+
+        if (menu) {
+            showPage(id, menu);
+        }
+
+    }
+
+</script>
+
+</body>
+</html>
